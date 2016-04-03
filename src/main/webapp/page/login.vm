@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <title>Hello</title>
+        <link href="/css/base.css">
+    </head>
+    <body>
+        <form action="/loginCheck" method="post">
+            用户名:<input type="text" name="userName"><br>
+            密  码:<input type="password" name="password">
+            #if($!{error})
+                <span class="red">${error}</span>
+            #end
+            <br>
+            <input type="submit" value="登录"><input type="reset" value="重置">
+        </form>
+    </body>
+</html>

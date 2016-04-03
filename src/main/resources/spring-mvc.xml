@@ -15,6 +15,66 @@
 
     <!-- 自动扫描且只扫描@Controller -->
     <context:component-scan base-package="com.yao"/>
+    <aop:aspectj-autoproxy />
+
+    <mvc:resources mapping="/css/**" location="/css/"/>
+
+
+    <!-- 处理在类级别上的@RequestMapping注解 -->
+    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+    </bean>
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" >
+        <property name="messageConverters">
+            <list>
+                <bean class = "org.springframework.http.converter.StringHttpMessageConverter">
+                    <property name = "supportedMediaTypes">
+                        <list>
+                            <value>text/html;charset=UTF-8</value>
+                        </list>
+                    </property>
+                </bean>
+                <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <value>application/json;charset=UTF-8</value>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <!-- velocity配置 -->
+    <bean id = "dateTools" name  = "dateTools"  class="org.apache.velocity.tools.generic.DateTool"/>
+    <bean id = "numberTools" name  = "numberTools"  class="org.apache.velocity.tools.generic.NumberTool"/>
+    <bean name="velocityTools" class="java.util.HashMap">
+        <constructor-arg>
+            <util:map map-class="java.util.HashMap">
+                <entry key="dateTools" value-ref="dateTools"/>
+                <entry key="numberTools" value-ref="numberTools"/>
+            </util:map>
+        </constructor-arg>
+    </bean>
+    <bean id="velocityConfigurer"
+          class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <property name="resourceLoaderPath" value="/page/" />
+        <property name="configLocation" value="classpath:velocity.properties" />
+    </bean>
+    <bean id="velocityLayoutViewResolver"
+          class="com.yao.velocity.VelocityLayoutViewResolver">
+        <property name="cache" value="false" />
+        <property name="prefix" value="" />
+        <property name="suffix" value=".vm" />
+        <property name="layoutUrl" value="/layout/emptyLayout.vm" />
+        <property name="contentType" value="text/html;charset=UTF-8" />
+        <property name="exposeRequestAttributes" value="true" />
+        <property name="exposeSpringMacroHelpers" value="true" />
+        <property name="dateToolAttribute" value="dateTool" />
+        <property name="numberToolAttribute" value="numberTool" />
+        <property name="velocityTools" ref="velocityTools" />
+        <property name="viewClass"
+                  value="com.yao.velocity.VelocityLayoutView" />
+    </bean>
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
             destroy-method="close"
             p:driverClassName="com.mysql.jdbc.Driver"
@@ -23,10 +83,4 @@
             p:password="root"/>
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"
           p:dataSource-ref="dataSource"/>
-    <aop:aspectj-autoproxy />
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-            p:viewClass="org.springframework.web.servlet.view.JstlView"
-            p:prefix="/page/"
-            p:suffix=".jsp"/>
-
 </beans>

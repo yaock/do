@@ -1,0 +1,8 @@
+<html>
+    <head>
+        <title>Hello</title>
+    </head>
+<body>
+$!{user.userName},登录成功，您的当前积分为$!{user.credits};
+</body>
+</html>
