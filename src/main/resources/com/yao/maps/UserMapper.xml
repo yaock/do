@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yao.dao.UserMapper">
+
+    <resultMap type="User" id="userResultMap">
+        <id property="userId" column="USERID"/>
+        <result property="userName" column="USERNAME"/>
+        <result property="password" column="PASSWORD"/>
+        <result property="credits" column="CREDITS"/>
+        <result property="lastIp" column="LASTIP"/>
+        <result property="lastVisit" column="LASTVISIT"/>
+    </resultMap>
+
+    <!-- 查询用户，根据name -->
+    <select id="getMatchCount" parameterType="String" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM user WHERE username=#{0} and password=#{1}
+    </select>
+    <!-- 查询用户，根据name -->
+    <select id="findUserByUserName" parameterType="String" resultType="User" resultMap="userResultMap">
+        SELECT userid, username, credits FROM user WHERE username=#{userName}
+    </select>
+
+    <!-- 查询学生列表 -->
+    <update id="updateLoginInfo"  parameterType="User">
+        UPDATE user SET lastVisit=#{lastVisit},lastip=#{lastIp},credits=#{credits} WHERE userid=#{userId}
+    </update>
+
+</mapper>

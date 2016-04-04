@@ -75,12 +75,42 @@
         <property name="viewClass"
                   value="com.yao.velocity.VelocityLayoutView" />
     </bean>
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
-            destroy-method="close"
-            p:driverClassName="com.mysql.jdbc.Driver"
-            p:url="jdbc:mysql://localhost:3306/do"
-            p:username="root"
-            p:password="root"/>
-    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"
-          p:dataSource-ref="dataSource"/>
+    <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"-->
+            <!--destroy-method="close"-->
+            <!--p:driverClassName="com.mysql.jdbc.Driver"-->
+            <!--p:url="jdbc:mysql://localhost:3306/do"-->
+            <!--p:username="root"-->
+            <!--p:password="root"/>-->
+    <!--<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"-->
+          <!--p:dataSource-ref="dataSource"/>-->
+
+
+    <context:property-placeholder location="classpath:mysql.properties" />
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation" value="classpath:mybatis-config.xml" />
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!-- mapper bean -->
+    <bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.yao.dao.UserMapper" />
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
+    <bean id="loginLogMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.yao.dao.LoginLogMapper" />
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
+
 </beans>

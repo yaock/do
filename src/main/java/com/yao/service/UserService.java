@@ -1,7 +1,8 @@
 package com.yao.service;
 
-import com.yao.dao.LoginLogDao;
-import com.yao.dao.UserDao;
+
+import com.yao.dao.LoginLogMapper;
+import com.yao.dao.UserMapper;
 import com.yao.domain.LoginLog;
 import com.yao.domain.User;
 import org.springframework.stereotype.Service;
@@ -14,17 +15,17 @@ import javax.annotation.Resource;
 @Service
 public class UserService {
     @Resource
-    private UserDao userDao;
+    private UserMapper userMapper;
     @Resource
-    private LoginLogDao loginLogDao;
+    private LoginLogMapper loginLogMapper;
 
     public boolean hashMatchUser(String userName, String password) {
-        int matchCount = userDao.getMatchCount(userName, password);
+        int matchCount = userMapper.getMatchCount(userName, password);
         return matchCount > 0;
     }
 
     public User findUserByUserName(String userName) {
-        return userDao.findUserByUserName(userName);
+        return userMapper.findUserByUserName(userName);
     }
 
     public void loginSuccess(User user) {
@@ -33,7 +34,7 @@ public class UserService {
         loginLog.setUserId(user.getUserId());
         loginLog.setIp(user.getLastIp());
         loginLog.setLoginDate(user.getLastVisit());
-        userDao.updateLoginInfo(user);
-        loginLogDao.insertLoginLog(loginLog);
+        userMapper.updateLoginInfo(user);
+        loginLogMapper.insertLoginLog(loginLog);
     }
 }
