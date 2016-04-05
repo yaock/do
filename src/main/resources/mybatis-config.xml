@@ -5,8 +5,8 @@
         <typeAlias alias="User" type="com.yao.domain.User"/>
         <typeAlias alias="LoginLog" type="com.yao.domain.LoginLog"/>
     </typeAliases>
-    <mappers>
-        <mapper resource="com/yao/maps/UserMapper.xml" />
-        <mapper resource="com/yao/maps/LoginLogMapper.xml" />
-    </mappers>
+    <!--<mappers>-->
+        <!--<mapper resource="com/yao/maps/UserMapper.xml" />-->
+        <!--<mapper resource="com/yao/maps/LoginLogMapper.xml" />-->
+    <!--</mappers>-->
 </configuration>
